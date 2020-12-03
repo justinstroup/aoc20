@@ -10,23 +10,11 @@ import (
 )
 
 func isValid(pass string, min int, max int, c byte) bool {
-	var l = len(pass)
-	if l <= min {
+	if min == 0 || max == 0 {
 		return false
 	}
 
-	var count = 0
-	for i := 0; i < l; i++ {
-		if pass[i] == c {
-			count++
-		}
-
-		if count > max {
-			return false
-		}
-	}
-
-	return count >= min
+	return (pass[min-1] != c) != (pass[max-1] != c)
 }
 
 func main() {
