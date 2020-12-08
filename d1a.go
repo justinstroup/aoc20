@@ -3,37 +3,33 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
+	"io"
 	"os"
-	"strconv"
 )
 
-func main() {
-	memo := make(map[int]int)
+var reader *bufio.Reader = bufio.NewReader(os.Stdin)
+var writer *bufio.Writer = bufio.NewWriter(os.Stdout)
 
-	scanner := bufio.NewScanner(os.Stdin)
-	var count = 1
-	for scanner.Scan() {
-		// fmt.Println(scanner.Text())
-		var num, err = strconv.Atoi(scanner.Text())
-		if err != nil {
-			log.Fatal(err)
+func scanf(f string, a ...interface{}) (n int, err error) { return fmt.Fscanf(reader, f, a...) }
+func printf(f string, a ...interface{})                   { fmt.Fprintf(writer, f, a...) }
+
+func main() {
+	defer writer.Flush()
+
+	sum := 2020
+	memo := make(map[int]int)
+	var n int
+	for {
+		if _, err := scanf("%d\n", &n); err == io.EOF {
+			break
 		}
 
-		if memo[num] != 0 {
-			fmt.Println("Answer:", memo[num]*num)
-			fmt.Println("Count:", count)
+		if v, doesExist := memo[n]; doesExist {
+			printf("%d\n", v*n)
 		} else {
-			var diff = 2020 - num
-			if diff > -1 {
-				memo[diff] = num
+			if n <= sum {
+				memo[sum-n] = n
 			}
 		}
-
-		count++
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Println(err)
 	}
 }
